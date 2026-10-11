@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-bg font-sans text-ink antialiased;
+    /* Fine engineering-paper grid behind everything */
+    background-image:
+      linear-gradient(rgba(148, 163, 184, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 184, 0.045) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  /* Visible keyboard focus everywhere */
+  :focus-visible {
+    outline: 2px solid theme('colors.accent');
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  .container-page { @apply mx-auto w-full max-w-6xl px-5 sm:px-8; }
+
+  /* Small monospace label, used for section names and metadata */
+  .label-mono { @apply font-mono text-xs uppercase tracking-widest text-accent; }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm border px-5 py-2.5 text-sm font-medium transition-colors;
+  }
+  .btn-primary { @apply border-accent bg-accent text-bg hover:bg-sky-300; }
+  .btn-secondary { @apply border-line bg-surface text-ink hover:border-accent hover:text-accent; }
+
+  /* Orange tag that marks content you still need to fill in.
+     Only ever rendered in development (npm run dev), never in the built site. */
+  .placeholder-chip {
+    @apply inline-block rounded-sm border border-dashed border-safety/70 bg-safety/10 px-1.5 py-0.5 font-mono text-xs text-safety;
+  }
+}
+
+/* ---------- Motion ---------- */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fade-up 0.6s ease-out both; }
+
+@keyframes draw {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+/* Used with pathLength={1} on SVG paths to "draw" an outline */
+.draw { stroke-dasharray: 1; stroke-dashoffset: 0; animation: draw 2.4s ease-out both; }
+
+/* Respect the visitor's "reduce motion" setting */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .fade-up, .draw { animation: none; }
+  * { transition-duration: 0.01ms !important; }
+}
+
+/* ---------- Printing (used by the Resume page) ---------- */
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff !important; background-image: none !important; }
+  /* Dark theme colors would print as pale text; force a plain black-on-white resume */
+  .print-light, .print-light * {
+    color: #111 !important;
+    background: transparent !important;
+    border-color: #999 !important;
+  }
+  .print-light { border: none !important; padding: 0 !important; }
+  a { text-decoration: none !important; }
+}
