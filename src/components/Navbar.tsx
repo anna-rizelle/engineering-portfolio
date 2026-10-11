@@ -23,7 +23,9 @@ export function Navbar() {
   const location = useLocation()
 
   // Close the mobile menu whenever the page changes
-  useEffect(() => setOpen(false), [location.pathname])
+  useEffect(() => {
+    setOpen(false)
+  }, [location.pathname])
 
   // Close the mobile menu with the Escape key
   useEffect(() => {

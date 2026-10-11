@@ -6,7 +6,11 @@ import { Navbar } from './Navbar'
 /** Scroll back to the top whenever you move to a different page. */
 function ScrollToTop() {
   const { pathname } = useLocation()
-  useEffect(() => window.scrollTo(0, 0), [pathname])
+  // Braces matter here: the effect must return nothing. Some browsers return a
+  // value from scrollTo, and React would try to run it as a cleanup function.
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
   return null
 }
 
